@@ -45,7 +45,8 @@ if __name__ == '__main__':
             for ip in ips:
                 print(f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}")
             if match:
-                print(match.group(0))
+                print(re.sub(r'\[(\.)\]', r'\1', match.group(0)))
+                # print(match.group(0))
 
 
     # with open(txt_document, "r", encoding="utf-8") as tfile:

@@ -32,19 +32,17 @@ def convert_pdf_to_txt(path):
 
 
 if __name__ == '__main__':
-    txt = convert_pdf_to_txt('files/mn01.pdf')
-    txt.seek(0)
-    reg = None
-    for line in txt.readlines():
-        reg = re.findall(r'Документ зарегистрирован № МН-(\d\d/\d+) от (\d\d)\.(\d\d)\.(\d{4})', line)
-        for rr in reg:
-            print(f'Регистрация: MN-{rr[0]}/{rr[1]}{rr[2]}{rr[3]} ')
+    with convert_pdf_to_txt('files/mn01.pdf') as txt:
+        txt.seek(0)
+        reg = None
+        for line in txt.readlines():
+            reg = re.findall(r'Документ зарегистрирован № МН-(\d\d/\d+) от (\d\d)\.(\d\d)\.(\d{4})', line)
+            for rr in reg:
+                print(f'Регистрация: MN-{rr[0]}/{rr[1]}{rr[2]}{rr[3]} ')
 
-        res = re.findall(r'(\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})', line)
-        # print(f'res={res}')
-        for ip in res:
-            print(f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}")
-    txt.close()
+            ips = re.findall(r'(\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})', line)
+            for ip in ips:
+                print(f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}")
 
 
     # pdf_document = "files/mn.pdf"

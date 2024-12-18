@@ -41,36 +41,20 @@ if __name__ == '__main__':
                 print(f'Регистрация: MN-{rr[0]}/{rr[1]}{rr[2]}{rr[3]} ')
 
             ips = re.findall(r'(\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})', line)
+            match = re.search(r'((?!-)[A-Za-z0-9-]{1,63}(?<!-)\[\.\])+[A-Za-z]{2,6}', line)
             for ip in ips:
                 print(f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}")
+            if match:
+                print(match.group(0))
 
-
-    # pdf_document = "files/mn.pdf"
-    # txt_document = "files/1433.txt"
-    # with open(pdf_document, "rb") as fpdf:
-    #     pdf = PdfFileReader(fpdf)
-    #
-    #     info = pdf.getDocumentInfo()
-    #     pages = pdf.getNumPages()
-    #     print("Количество страниц в документе: %i\n\n" % pages)
-    #     print("Мета-описание: ", info)
-    #     # for i in range(pages):
-    #     page = pdf.getPage(0)
-    #     print(" мета: ", page, "\n\nСодержание;\n")
-    #     txt_content = page.extractText()
-    #     with open('files/output.txt', 'w', encoding='utf-8') as f:
-    #         f.write(txt_content)
-    #     # print(txt_content.encode('utf-8'))
 
     # with open(txt_document, "r", encoding="utf-8") as tfile:
     #     for line in tfile:
     #         tstring = line.strip()
-    #         match = re.search(r'((?!-)[A-Za-z0-9-]{1,63}(?<!-)\[\.\])+[A-Za-z]{2,6}', tstring)
+    #
     #         res = re.findall(r'(\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})', tstring)
     #         for ip in res:
     #             print(f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}")
-    #         if match:
-    #             # print(match.group(0))
-    #             print(re.sub(r'\[(\.)\]', r'\1', match.group(0)))
+
 
     # print(re.sub(r'\[(\.)\]', r'\1', hres.string))

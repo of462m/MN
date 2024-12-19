@@ -5,11 +5,12 @@ from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
 from io import StringIO
 import re
+import os
 
 def convert_pdf_to_txt(path):
     rsrcmgr = PDFResourceManager()
     retstr = StringIO()
-    codec = 'utf-8'
+    # codec = 'utf-8'
     laparams = LAParams()
     # device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
     device = TextConverter(rsrcmgr, retstr, laparams=laparams)
@@ -24,38 +25,35 @@ def convert_pdf_to_txt(path):
                                   check_extractable=True):
         interpreter.process_page(page)
 
-    # text = retstr.getvalue()
-
     fp.close()
     device.close()
     return retstr
 
-
 if __name__ == '__main__':
-    with convert_pdf_to_txt('files/mn01.pdf') as txt:
-        txt.seek(0)
-        reg = None
-        for line in txt.readlines():
-            reg = re.findall(r'Документ зарегистрирован № МН-(\d\d/\d+) от (\d\d)\.(\d\d)\.(\d{4})', line)
-            for rr in reg:
-                print(f'Регистрация: MN-{rr[0]}/{rr[1]}{rr[2]}{rr[3]} ')
+    src_dirname = './files'
+    dst_dirname = './results'
+    for fname in os.listdir(src_dirname):
+        fname_txt = f"{dst_dirname}/{os.path.splitext(fname)[0]}.txt"
+        with convert_pdf_to_txt(f'{src_dirname}/{fname}') as txt:
+            txt.seek(0)
+            reg = ()
+            ip_list = []
+            for line in txt.readlines():
+                if not reg:
+                    reg = re.findall(r'Документ зарегистрирован № МН-(\d\d/\d+) от (\d\d)\.(\d\d)\.(\d{4})', line)
+                    # if reg:
+                    #     print(f'Регистрация: MN-{reg[0][0]}/{reg[0][1]}{reg[0][2]}{reg[0][3]} ')
 
-            ips = re.findall(r'(\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})', line)
-            match = re.search(r'((?!-)[A-Za-z0-9-]{1,63}(?<!-)\[\.\])+[A-Za-z]{2,6}', line)
-            for ip in ips:
-                print(f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}")
-            if match:
-                print(re.sub(r'\[(\.)\]', r'\1', match.group(0)))
-                # print(match.group(0))
+                ips = re.findall(r'(\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})', line)
+                for ip in ips:
+                    ip_list.append(f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}")
+            ip_list_uniq = list(dict.fromkeys(ip_list))
+            for ip in ip_list_uniq:
+                # print(f"{ip}\t\t#MN-{reg[0][0]} {reg[0][1]}.{reg[0][2]}.{reg[0][3]}")
+                print(f"{ip} -> {fname_txt}")
 
-
-    # with open(txt_document, "r", encoding="utf-8") as tfile:
-    #     for line in tfile:
-    #         tstring = line.strip()
-    #
-    #         res = re.findall(r'(\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})', tstring)
-    #         for ip in res:
-    #             print(f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}")
-
-
-    # print(re.sub(r'\[(\.)\]', r'\1', hres.string))
+                # match = re.search(r'((?!-)[A-Za-z0-9-]{1,63}(?<!-)\[\.\])+[A-Za-z]{2,6}', line)
+                # for ip in ips:
+                #     print(f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}")
+                # if match:
+                #     print(re.sub(r'\[(\.)\]', r'\1', match.group(0)))

@@ -33,7 +33,8 @@ if __name__ == '__main__':
     src_dirname = 'files'
     dst_dirname = 'results'
     for fname in os.listdir(src_dirname):
-        fname_txt = f"{dst_dirname}/{os.path.splitext(fname)[0]}.txt"
+        fname_ip = f"{dst_dirname}/{os.path.splitext(fname)[0]}.ip"
+        fname_domain = f"{dst_dirname}/{os.path.splitext(fname)[0]}.domain"
         with convert_pdf_to_txt(f'{src_dirname}/{fname}') as txt:
             txt.seek(0)
             reg = ()
@@ -48,9 +49,10 @@ if __name__ == '__main__':
                 for ip in ips:
                     ip_list.append(f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}")
             ip_list_uniq = list(dict.fromkeys(ip_list))
-            for ip in ip_list_uniq:
+            with open(fname_ip, 'w', encoding='utf-8') as ff:
+                for ip in ip_list_uniq:
+                    ff.write(f"{ip}\n")
                 # print(f"{ip}\t\t#MN-{reg[0][0]} {reg[0][1]}.{reg[0][2]}.{reg[0][3]}")
-                print(f"{ip} -> {fname_txt}")
 
                 # match = re.search(r'((?!-)[A-Za-z0-9-]{1,63}(?<!-)\[\.\])+[A-Za-z]{2,6}', line)
                 # for ip in ips:

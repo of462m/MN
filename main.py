@@ -40,7 +40,6 @@ if __name__ == '__main__':
             ddate = match.group(1)
         else:
             ddate = f"{datetime.now().day}{datetime.now().month}{datetime.now().year}"
-        print(ddate)
         fname_ip = f"{dst_dirname}/{os.path.splitext(fname)[0]}.ip"
         fname_domain = f"{dst_dirname}/{os.path.splitext(fname)[0]}.domain"
         with convert_pdf_to_txt(f'{src_dirname}/{fname}') as txt:
@@ -50,16 +49,13 @@ if __name__ == '__main__':
             for line in txt.readlines():
                 if not reg:
                     reg = re.findall(r'Документ зарегистрирован № МН-(\d\d/\d+) от (\d\d)\.(\d\d)\.(\d{4})', line)
-                    # if reg:
-                    #     print(f'Регистрация: MN-{reg[0][0]}/{reg[0][1]}{reg[0][2]}{reg[0][3]} ')
-
                 ips = re.findall(r'(\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})', line)
                 for ip in ips:
                     ip_list.append(f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}")
             ip_list_uniq = list(dict.fromkeys(ip_list))
             with open(fname_ip, 'w', encoding='utf-8') as ff:
                 for ip in ip_list_uniq:
-                    ff.write(f"{ip}\t\t\t#{ddate}.MN-{reg[0][0]} {reg[0][1]}.{reg[0][2]}.{reg[0][3]}\n")
+                    ff.write(f"{ip}\t\t\t#{ddate}.МН-{reg[0][0]} {reg[0][1]}.{reg[0][2]}.{reg[0][3]}\n")
 
                 # match = re.search(r'((?!-)[A-Za-z0-9-]{1,63}(?<!-)\[\.\])+[A-Za-z]{2,6}', line)
                 # for ip in ips:

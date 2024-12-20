@@ -16,18 +16,18 @@ def convert_pdf_to_txt(path):
     laparams = LAParams()
     # device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
     device = TextConverter(rsrcmgr, retstr, laparams=laparams)
-    fp = open(path, 'rb')
-    interpreter = PDFPageInterpreter(rsrcmgr, device)
-    password = ""
-    maxpages = 0
-    caching = True
-    pagenos = set()
+    with open(path, 'rb') as fp:
+        interpreter = PDFPageInterpreter(rsrcmgr, device)
+        password = ""
+        maxpages = 0
+        caching = True
+        pagenos = set()
 
-    for page in PDFPage.get_pages(fp, pagenos, maxpages=maxpages, password=password, caching=caching,
-                                  check_extractable=True):
-        interpreter.process_page(page)
+        for page in PDFPage.get_pages(fp, pagenos, maxpages=maxpages, password=password, caching=caching,
+                                      check_extractable=True):
+            interpreter.process_page(page)
 
-    fp.close()
+        # fp.close()
     device.close()
     return retstr
 
@@ -54,7 +54,7 @@ if __name__ == '__main__':
             ip_list_uniq = list(dict.fromkeys(ip_list))
             with open(fname_ip, 'w', encoding='utf-8') as ff:
                 for ip in ip_list_uniq:
-                    ff.write(f"{ip}\t\t\t#{ddate}.MN-{reg[0][0]} {reg[0][1]}.{reg[0][2]}.{reg[0][3]}\n")
+                    ff.write(f"{ip}\t\t\t#{ddate}.MN-{reg[0][0]} {reg[0][1]}.{reg[0][2]}.{reg[0][3]}bb\n")
 
                 # match = re.search(r'((?!-)[A-Za-z0-9-]{1,63}(?<!-)\[\.\])+[A-Za-z]{2,6}', line)
                 # for ip in ips:

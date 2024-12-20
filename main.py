@@ -30,8 +30,8 @@ def convert_pdf_to_txt(path):
     return retstr
 
 if __name__ == '__main__':
-    src_dirname = './files'
-    dst_dirname = './results'
+    src_dirname = 'files'
+    dst_dirname = 'results'
     for fname in os.listdir(src_dirname):
         fname_txt = f"{dst_dirname}/{os.path.splitext(fname)[0]}.txt"
         with convert_pdf_to_txt(f'{src_dirname}/{fname}') as txt:

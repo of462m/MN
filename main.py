@@ -27,7 +27,6 @@ def convert_pdf_to_txt(path):
                                       check_extractable=True):
             interpreter.process_page(page)
 
-        # fp.close()
     device.close()
     return retstr
 
@@ -51,7 +50,7 @@ if __name__ == '__main__':
                 ips = re.findall(r'(\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})', line)
                 for ip in ips:
                     ip_list.append(f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}")
-            ip_list_uniq = list(dict.fromkeys(ip_list))
+            ip_list_uniq = list(dict.fromkeys(ip_list)) #удаляем дубликаты
             with open(fname_ip, 'w', encoding='utf-8') as ff:
                 for ip in ip_list_uniq:
                     ff.write(f"{ip}\t\t\t#{ddate}.MN-{reg[0][0]} {reg[0][1]}.{reg[0][2]}.{reg[0][3]}bb\n")

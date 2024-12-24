@@ -50,13 +50,26 @@ if __name__ == '__main__':
                 ips = re.findall(r'(\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})\[\.\](\d{1,3})', line)
                 for ip in ips:
                     ip_list.append(f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}")
+
+                match = re.search(r'((?!-)[A-Za-z0-9-]{1,63}(?<!-)\[\.\])+[A-Za-z]{2,6}', line)
+                if match:
+                    domains_list.append(re.sub(r'\[(\.)\]', r'\1', match.group(0)).lower())
+
             ip_list_uniq = list(dict.fromkeys(ip_list)) #удаляем дубликаты
+            domains_list_uniq = list(dict.fromkeys(domains_list)) #удаляем дубликаты\
+
             with open(fname_ip, 'w', encoding='utf-8') as ff:
                 for ip in ip_list_uniq:
                     ff.write(f"{ip}\t\t\t#{ddate}.MN-{reg[0][0]} {reg[0][1]}.{reg[0][2]}.{reg[0][3]}bb\n")
 
-                # match = re.search(r'((?!-)[A-Za-z0-9-]{1,63}(?<!-)\[\.\])+[A-Za-z]{2,6}', line)
-                # for ip in ips:
-                #     print(f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}")
-                # if match:
-                #     print(re.sub(r'\[(\.)\]', r'\1', match.group(0)))
+            with open(fname_domain, 'w', encoding='utf-8') as ff:
+                for domain in domains_list_uniq:
+                    ff.write(f"{domain}\t\tA\t127.0.0.1;\t#{ddate}.MN-{reg[0][0]} {reg[0][1]}.{reg[0][2]}.{reg[0][3]}\n")
+
+
+
+
+
+
+
+
